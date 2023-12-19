@@ -29,18 +29,33 @@ public class SearchService implements ISearchService {
             return Uni.createFrom().item(new ArrayList<>());
         }
 
+        Uni<List<Patient>> patients = searchPatientByName(term);
         Uni<List<Patient>> diagnosisPatientSearch = searchPatientByDiagnosis(term);
         Uni<List<Patient>> staffPatientSearch = searchPatientByStaff(term);
 
         //return staffPatientSearch;
 
         // Merge the two Uni lists into one
-        return mergePatientLists(diagnosisPatientSearch, staffPatientSearch);
+        return mergePatientLists(patients,mergePatientLists(diagnosisPatientSearch, staffPatientSearch));
     }
 
     @Override
     public Uni<List<Encounter>> searchEncounter(String term) {
         return null;
+    }
+
+    public Uni<List<Patient>> searchPatientByName(String term) {
+        return sessionFactory.openSession()
+                .flatMap(session ->
+                        session.createQuery("FROM PatientDB where name like ?1", PatientDB.class)
+                                .setParameter(1,'%' + term + '%')
+                                .getResultList()
+                                .onItem().transformToUni(patientDB -> {
+                                    List<Patient> patients = patientDB.isEmpty() ? Collections.emptyList() : patientDB.stream().map(Patient::convert).collect(Collectors.toList());
+                                    return Uni.createFrom().item(patients);
+                                })
+                                .eventually(session::close)
+                );
     }
 
 
