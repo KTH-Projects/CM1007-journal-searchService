@@ -6,12 +6,12 @@ import com.example.persistance.entity.DiagnosisDB;
 import com.example.persistance.entity.EncounterDB;
 import com.example.persistance.entity.PatientDB;
 import com.example.persistance.entity.StaffDB;
-import io.quarkus.hibernate.reactive.panache.common.WithSession;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.hibernate.reactive.mutiny.Mutiny;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,15 +33,27 @@ public class SearchService implements ISearchService {
         Uni<List<Patient>> diagnosisPatientSearch = searchPatientByDiagnosis(term);
         Uni<List<Patient>> staffPatientSearch = searchPatientByStaff(term);
 
-        //return staffPatientSearch;
-
         // Merge the two Uni lists into one
         return mergePatientLists(patients,mergePatientLists(diagnosisPatientSearch, staffPatientSearch));
     }
 
     @Override
     public Uni<List<Encounter>> searchEncounter(String term) {
-        return null;
+        return sessionFactory.openSession() // Open a new session
+                .flatMap(session ->
+                        session.createQuery("FROM EncounterDB where staff.name like ?1", EncounterDB.class)
+                                .setParameter(1, '%' + term + '%')
+                                .getResultList()
+                                .onItem().transformToUni(encounters -> {
+                                    List<Encounter> encounterList = encounters.isEmpty() ?
+                                            Collections.emptyList() :
+                                            encounters.stream()
+                                                    .map(Encounter::convert) // Assuming there's a static convert method in Encounter class
+                                                    .collect(Collectors.toList());
+                                    return Uni.createFrom().item(encounterList);
+                                })
+                                .eventually(session::close) // Ensure to close the session
+                );
     }
 
     public Uni<List<Patient>> searchPatientByName(String term) {
@@ -150,41 +162,5 @@ public class SearchService implements ISearchService {
                     return new ArrayList<>(patientSet);
                 });
     }
-
- /*
-        System.out.println("after null check");
-        Uni<List<Object>> patientSearch = PatientDB.find("name like ?1 or cast(age as string) like ?1 or sex like ?1", '%' + term + '%')
-                .list()
-                .onItem().transformToUni(patients -> Uni.createFrom().item(new ArrayList<>(patients)));
-
-        System.out.println("after patient");
-        Uni<List<Object>> staffSearch = StaffDB.find("name like ?1 or cast(age as string) like ?1 or sex like ?1", '%' + term + '%')
-                .list()
-                .onItem().transformToUni(staff -> Uni.createFrom().item(new ArrayList<>(staff)));
-        System.out.println("after staff");
-        Uni<List<Object>> encounterSearch = EncounterDB.find("patient.name like ?1 or staff.name like ?1", '%' + term + '%')
-                .list()
-                .onItem().transformToUni(encounters -> Uni.createFrom().item(new ArrayList<>(encounters)));
-        System.out.println("after encounter");
-        Uni<List<Object>> diagnosisSearch = DiagnosisDB.find("diagnosis like ?1 or patient.name like ?1 or staff.name like ?1", '%' + term + '%')
-                .list()
-                .onItem().transformToUni(diagnoses -> Uni.createFrom().item(new ArrayList<>(diagnoses)));
-        System.out.println("after diangosis");
-        return patientSearch.flatMap(patients -> staffSearch
-                .flatMap(staff -> {
-                            patients.addAll(staff);
-                            return encounterSearch;
-                        })
-                        .flatMap(encounters -> {
-                            patients.addAll(encounters);
-                            return diagnosisSearch;
-                        })
-                        .onItem().transform(diagnoses -> {
-                            patients.addAll(diagnoses);
-                            return patients;
-                        })
-        );
-
-         */
 
 }

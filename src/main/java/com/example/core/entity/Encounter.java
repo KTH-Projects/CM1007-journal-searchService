@@ -40,7 +40,7 @@ public class Encounter {
                 Observation observation = new Observation();
                 observation.setObservation(oDB.getObservation());
                 observation.setId(oDB.getId());
-                observation.setEncounter(e);
+                //observation.setEncounter(e);
 
                 observations.add(observation);
             }

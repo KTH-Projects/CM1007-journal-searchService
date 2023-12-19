@@ -25,14 +25,12 @@ public class SearchController {
     @Path("/patient")
     @GET()
     public Uni<List<Patient>> searchPatient(@QueryParam("value") String term) {
-        System.out.println("controller");
         return searchService.searchPatient(term);
     }
 
     @Path("/encounter")
     @GET()
     public Uni<List<Encounter>> searchEncounter(@QueryParam("value") String term) {
-        System.out.println("controller");
-        return null;
+        return searchService.searchEncounter(term);
     }
 }
