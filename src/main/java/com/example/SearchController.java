@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.core.entity.Encounter;
+import com.example.core.entity.Patient;
 import com.example.core.service.ISearchService;
 import io.smallrye.mutiny.Uni;
 import jakarta.inject.Inject;
@@ -15,9 +17,22 @@ public class SearchController {
     @Inject
     ISearchService searchService;
 
+    public SearchController(ISearchService searchService) {
+        this.searchService = searchService;
+        System.out.println(System.getenv());
+    }
 
-    @GET
-    public Uni<List<Object>> search(@QueryParam("value") String term) {
-        return searchService.search(term);
+    @Path("/patient")
+    @GET()
+    public Uni<List<Patient>> searchPatient(@QueryParam("value") String term) {
+        System.out.println("controller");
+        return searchService.searchPatient(term);
+    }
+
+    @Path("/encounter")
+    @GET()
+    public Uni<List<Encounter>> searchEncounter(@QueryParam("value") String term) {
+        System.out.println("controller");
+        return null;
     }
 }
