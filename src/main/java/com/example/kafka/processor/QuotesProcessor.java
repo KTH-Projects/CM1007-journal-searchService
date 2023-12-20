@@ -1,11 +1,16 @@
 package com.example.kafka.processor;
 
+import com.example.core.entity.Patient;
+import com.example.core.service.ISearchService;
+import io.smallrye.mutiny.Uni;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import jakarta.enterprise.context.ApplicationScoped;
 import com.example.kafka.model.*;
+import jakarta.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -15,15 +20,13 @@ import java.util.Random;
 @ApplicationScoped
 public class QuotesProcessor {
 
-    private Random random = new Random();
+    @Inject
+    ISearchService searchService;
 
     @Incoming("quote-requests")
     @Outgoing("quotes")
-    @Blocking
-    public Quote process(String quoteRequest) throws InterruptedException {
-        // simulate some hard working task
+    public Uni<List<Patient>> process(String quoteRequest) throws InterruptedException {
         System.out.println("Processing quote request: " + quoteRequest);
-        Thread.sleep(200);
-        return new Quote(quoteRequest, random.nextInt(100));
+        return searchService.searchPatient(quoteRequest);
     }
 }
