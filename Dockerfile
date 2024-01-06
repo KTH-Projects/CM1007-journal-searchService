@@ -5,7 +5,7 @@ EXPOSE 8083
 WORKDIR /app
 
 # Copy the jar file and dependencies directory into the container
-COPY target/ /app/
+COPY target /app/
 
 
 # Run the JAR file
