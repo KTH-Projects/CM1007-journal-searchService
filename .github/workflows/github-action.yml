@@ -19,8 +19,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build and Test with Maven
-        run: ./mvnw package
+      - name: Build with Maven Wrapper
+        run: |
+          chmod +x ./mvnw
+          ./mvnw package -Dquarkus.package.type=jar
 
   docker:
     runs-on: ubuntu-latest
