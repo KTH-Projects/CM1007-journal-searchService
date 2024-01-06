@@ -33,7 +33,7 @@ public class QuotesResource {
 
     @RolesAllowed({"doctor", "staff"})
     @GET
-    @Produces(MediaType.SERVER_SENT_EVENTS) // denotes that server side events (SSE) will be produced
+    @Produces(MediaType.SERVER_SENT_EVENTS)
     public Multi<Uni<List<Patient>>> stream() {
         return quotes.log();
     }

@@ -1,6 +1,6 @@
 # Use OpenJDK JRE base image
 FROM openjdk:17-jdk-slim as runtime
-
+EXPOSE 8083
 # Set the working directory in the Docker container
 WORKDIR /app
 

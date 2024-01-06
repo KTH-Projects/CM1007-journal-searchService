@@ -11,10 +11,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.hibernate.reactive.mutiny.Mutiny;
 
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @ApplicationScoped
@@ -39,6 +37,10 @@ public class SearchService implements ISearchService {
 
     @Override
     public Uni<List<Encounter>> searchEncounter(String term) {
+        if (term == null || term.trim().isEmpty()) {
+            return Uni.createFrom().item(new ArrayList<>());
+        }
+
         return sessionFactory.openSession() // Open a new session
                 .flatMap(session ->
                         session.createQuery("FROM EncounterDB where staff.name like ?1", EncounterDB.class)

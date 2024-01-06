@@ -18,8 +18,8 @@ public class QuotesProcessor {
 
     @Incoming("quote-requests")
     @Outgoing("quotes")
-    public Uni<List<Patient>> process(String quoteRequest) throws InterruptedException {
-        System.out.println("Processing quote request: " + quoteRequest);
-        return searchService.searchPatient(quoteRequest);
+    public Uni<List<Patient>> process(String term) throws InterruptedException {
+        System.out.println("Processing quote request: " + term);
+        return searchService.searchPatient(term);
     }
 }
