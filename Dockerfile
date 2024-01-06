@@ -9,7 +9,7 @@ WORKDIR /app
 COPY target/quarkus-run.jar /app/
 
 # If your application needs additional libraries from the target/lib directory, copy them as well
-COPY target/lib/ /app/lib/
+#COPY target/lib/ /app/lib/
 
 # Run the JAR file
 # If your jar file is not a runnable jar, you may need to adjust this command
