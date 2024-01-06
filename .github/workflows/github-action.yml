@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and Test with Maven
-        run: mvn package
+        run: ./mvnw package
 
   docker:
     runs-on: ubuntu-latest
