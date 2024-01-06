@@ -1,4 +1,4 @@
-FROM adoptopenjdk:latest as builder
+FROM adoptopenjdk:21-jdk-hotspot as builder
 
 EXPOSE 8083
 
@@ -8,7 +8,7 @@ COPY . .
 
 RUN ./mvnw package
 
-FROM adoptopenjdk:latest
+FROM adoptopenjdk:21-jdk-hotspot
 
 COPY --from=builder /app/target/quarkus-app .
 
