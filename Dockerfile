@@ -1,4 +1,4 @@
-FROM adoptopenjdk:17-jre-hotspot as builder
+FROM eclipse-temurin:17-jdk-jammy as builder
 
 EXPOSE 8083
 
@@ -8,8 +8,9 @@ COPY . .
 
 RUN ./mvnw package
 
-FROM adoptopenjdk:17-jre-hotspot
+FROM eclipse-temurin:17-jdk-jammy
 
+WORKDIR /app
 COPY --from=builder /app/target/quarkus-app .
 
 # If your jar file is not a runnable jar, you may need to adjust this command
