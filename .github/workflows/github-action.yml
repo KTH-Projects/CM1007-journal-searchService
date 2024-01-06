@@ -3,7 +3,7 @@ name: kthcloud-ci
 on:
   push:
     branches:
-      - mainild
+      - main
 
 jobs:
   build-and-test:
