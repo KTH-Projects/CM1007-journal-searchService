@@ -5,8 +5,8 @@ EXPOSE 8083
 WORKDIR /app
 
 # Copy the jar file and dependencies directory into the container
-COPY target/quarkus-run.jar /app/
-COPY target/lib/ /app/lib/
+COPY target/ /app/
+
 
 # Run the JAR file
 CMD ["java", "-jar", "quarkus-run.jar"]
