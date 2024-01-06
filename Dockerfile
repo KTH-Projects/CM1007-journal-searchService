@@ -1,4 +1,4 @@
-FROM adoptopenjdk:21-jdk-hotspot as builder
+FROM eclipse-temurin:17-jdk-jammy as builder
 
 EXPOSE 8083
 
@@ -8,7 +8,7 @@ COPY . .
 
 RUN ./mvnw package
 
-FROM adoptopenjdk:21-jdk-hotspot
+FROM eclipse-temurin:17-jdk-jammy
 
 COPY --from=builder /app/target/quarkus-app .
 
