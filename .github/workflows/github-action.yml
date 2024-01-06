@@ -3,7 +3,7 @@ name: kthcloud-ci
 on:
   push:
     branches:
-      - main
+      - mainild
 
 jobs:
   build-and-test:
@@ -20,7 +20,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build and Test with Maven
-        run: mvn test
+        run: mvn clean install
 
   docker:
     runs-on: ubuntu-latest
