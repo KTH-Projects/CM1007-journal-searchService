@@ -35,6 +35,8 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+
       - name: build
         run: mvn package
 
@@ -44,6 +46,8 @@ jobs:
           registry: registry.cloud.cbh.kth.se
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
