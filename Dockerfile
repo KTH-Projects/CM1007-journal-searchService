@@ -9,3 +9,4 @@ COPY target/quarkus-app/ /app/
 
 # Run the JAR file
 CMD ["java", "-jar", "quarkus-run.jar"]
+
