@@ -63,11 +63,11 @@ public class QuotesResourceTest {
 
         // Assert
         result.subscribe().with(item -> {
-            // Subscribe to the Uni within the Multi and verify the emitted items
+
             item.subscribe().with(patients -> {
-                assertFalse(patients.isEmpty()); // Check the list isn't empty
-                Patient patient = patients.get(0); // Get the first patient
-                assertEquals("1", patient.getId()); // Validate the patient details
+                assertFalse(patients.isEmpty());
+                Patient patient = patients.get(0);
+                assertEquals("1", patient.getId());
             });
         });
     }

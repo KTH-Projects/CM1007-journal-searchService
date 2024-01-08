@@ -39,8 +39,8 @@ public class QuotesProcessorTest {
 
         // Assert
         resultUni.subscribe().with(item -> {
-            assertNotNull(item); // Ensure the result is not null
-            assertEquals(expectedPatients, item); // Ensure the result matches the expected output
+            assertNotNull(item);
+            assertEquals(expectedPatients, item);
         });
     }
 
@@ -57,12 +57,12 @@ public class QuotesProcessorTest {
 
         // Assert
         resultUni.subscribe().with(patients -> {
-            assertNotNull(patients); // Ensure the result is not null
-            assertFalse(patients.isEmpty()); // Ensure the list isn't empty
-            Patient patient = patients.get(0); // Get the first patient
-            assertEquals("Test Patient", patient.getName()); // Validate patient details
-            assertNotNull(patient.getEncounters()); // Ensure encounters are present
-            assertEquals("encounterId1", patient.getEncounters().get(0).getId()); // Validate encounter details
+            assertNotNull(patients);
+            assertFalse(patients.isEmpty());
+            Patient patient = patients.get(0);
+            assertEquals("Test Patient", patient.getName());
+            assertNotNull(patient.getEncounters());
+            assertEquals("encounterId1", patient.getEncounters().get(0).getId());
         });
     }
 }

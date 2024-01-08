@@ -41,7 +41,7 @@ public class SearchServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         when(sessionFactory.openSession()).thenReturn(Uni.createFrom().item(session));
-        // Initialize the mockQuery here with proper behavior
+
         when(session.createQuery(eq("FROM PatientDB where name like ?1"), any(Class.class))).thenReturn(mockQuery);
         when(mockQuery.setParameter(eq(1), anyString())).thenReturn(mockQuery);
 
